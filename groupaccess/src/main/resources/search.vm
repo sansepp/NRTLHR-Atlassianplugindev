@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>Group access</title>
+    <meta name="decorator" content="atl.admin">
+    $webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
+  </head>
+  <body>
+    <form id="search" class="aui">
+      <div class="field-group">
+        <label for="group">Group name/key</label>
+        <input type="text" id="group" name="group" class="text">
+      </div>
+      <div class="field-group">
+        <input type="submit" value="Search" class="button">
+      </div>
+    </form>
+  </body>
+</html>

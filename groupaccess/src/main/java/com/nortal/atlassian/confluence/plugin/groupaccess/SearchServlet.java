@@ -2,16 +2,15 @@ package com.nortal.atlassian.confluence.plugin.groupaccess;
 
 import java.io.IOException;
 import java.net.URI;
-
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.sal.api.auth.LoginUriProvider;
-import com.atlassian.sal.api.user.UserKey;
 import com.atlassian.sal.api.user.UserManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
 	private final UserManager userManager;
 	private final LoginUriProvider loginUriProvider;
@@ -25,16 +24,14 @@ public class SearchServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		UserKey userKey = userManager.getRemoteUserKey(request);
-		userManager.isSystemAdmin(userKey);
-		if (userKey == null || !userManager.isSystemAdmin(userKey)) {
+		String userName = userManager.getRemoteUsername(request);
+		if (userName == null || !userManager.isSystemAdmin(userName)) {
 			redirectToLogin(request, response);
 			return;
 		}
 		
 		response.setContentType("text/html;charset=utf-8");
 		renderer.render("search.vm", response.getWriter());
-		//renderer.renderTo(response.getWriter(), "groupaccess", "search.vm", null);
 	}
 
 	private void redirectToLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {

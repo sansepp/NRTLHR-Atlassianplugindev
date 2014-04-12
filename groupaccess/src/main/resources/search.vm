@@ -2,17 +2,28 @@
   <head>
     <title>Group access</title>
     <meta name="decorator" content="atl.admin">
-    $webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
+    <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
+    $webResourceManager.requireResource("com.nortal.atlassian.confluence.plugin.groupaccess:groupaccess-resources")
   </head>
   <body>
-    <form id="search" class="aui">
-      <div class="field-group">
-        <label for="group">Group name/key</label>
-        <input type="text" id="group" name="group" class="text">
-      </div>
-      <div class="field-group">
-        <input type="submit" value="Search" class="button">
-      </div>
-    </form>
+  	<div id="search-container">
+		<div id="search-form-container">
+		    <form id="search-form" class="aui">
+		      <div class="field-group">
+				<label for="search-form-input">Group name</label>
+				<input type="text" id="search-form-input" name="group" class="text">
+				<button class="button" id="search-submit-button">search</button>
+		      </div>
+		    </form>
+		</div>
+	    <div id="search-results-container"></div>
+    </div>
+	<script type="text/x-template" id="search-result-template">
+	    <div>
+	        <div class="search-result-header">
+	            <a class="search-result-link"></a>
+	        </div>
+	    </div>
+	</script>
   </body>
 </html>

@@ -1,0 +1,13 @@
+#search-results-container {
+    margin: 0px 15px;
+}
+
+div.search-result-header {
+    font-weight: bold;
+}
+
+div.search-result-body {
+    margin: 10px;
+    padding-left: 10px;
+    border-left: 3px solid #ccc;
+}

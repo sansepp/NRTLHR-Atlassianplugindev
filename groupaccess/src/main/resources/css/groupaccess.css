@@ -1,13 +1,12 @@
-#search-results-container {
-    margin: 0px 15px;
-}
-
-div.search-result-header {
-    font-weight: bold;
-}
-
 div.search-result-body {
     margin: 10px;
-    padding-left: 10px;
-    border-left: 3px solid #ccc;
+    padding: 10px;
+    border-left: 2px solid #E8E8E8;
+}
+
+.result-border {
+    border: 1px solid #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }

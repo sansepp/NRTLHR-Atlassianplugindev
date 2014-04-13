@@ -1,4 +1,4 @@
-package com.nortal.atlassian.confluence.plugin.groupaccess;
+package com.nortal.atlassian.confluence.plugin.groupaccess.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.atlassian.sal.api.user.UserManager;
+import com.nortal.atlassian.confluence.plugin.groupaccess.rest.model.SearchResourceModel;
 
 /**
  * A resource of message.
@@ -31,33 +32,27 @@ public class SearchResource {
 	@AnonymousAllowed
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response get(@PathParam("search") String search) {
-		
 		String userName = userManager.getRemoteUsername();
 		if (userName == null || !userManager.isSystemAdmin(userName)) {
-			return Response.ok().build();
+			return Response.serverError().build();
 		}
-		
+		if (search == null || search.isEmpty() || search.trim().isEmpty()) {
+			return Response.ok(new SearchResourceModel(new HashMap<String, String>(), "empty-string")).build();
+		}
 		Map<String, String> result = searchSpaces(search);
-		return Response.ok(new SearchResourceModel(result, result.size() > 0 ? null : "no-result")).build();
+		
+		return Response.ok(new SearchResourceModel(result, result.size() > 0 ? "null" : "no-result")).build();	
 	}
 	
 	private Map<String, String> searchSpaces(String groupName) {
-		
 		Map<String, String> result = new HashMap<String, String>();
-		
-		List<Space> spaces = spaceManager.getAllSpaces();
-		
-		for (Space space : spaces) {
+		for (Space space : spaceManager.getAllSpaces()) {
 			for (SpacePermission permission : space.getPermissions()) {
-				if (permission.isGroupPermission()) {
-					if (permission.getGroup().equals(groupName)) {
-						result.put(space.getKey(), space.getName());
-					}
+				if (permission.isGroupPermission() && permission.getGroup().equals(groupName)) {
+					result.put(space.getKey(), space.getName());
 				}
 			}
 		}
-		
 		return result;
-		
 	}
 }

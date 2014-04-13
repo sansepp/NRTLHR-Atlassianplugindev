@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Group access</title>
+    <title>$i18n.getText("search.title")</title>
     <meta name="decorator" content="atl.admin">
     <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
     $webResourceManager.requireResource("com.nortal.atlassian.confluence.plugin.groupaccess:groupaccess-resources")
@@ -9,21 +9,49 @@
   	<div id="search-container">
 		<div id="search-form-container">
 		    <form id="search-form" class="aui">
-		      <div class="field-group">
-				<label for="search-form-input">Group name</label>
-				<input type="text" id="search-form-input" name="group" class="text">
-				<button class="button" id="search-submit-button">search</button>
-		      </div>
+				<div class="field-group">
+					<label for="search-form-input">$i18n.getText("search.input.lable")</label>
+				    <input 
+						id="search-form-input" 
+						type="text" 
+						class="text autocomplete-group" 
+						data-none-message="$i18n.getText("search.input.nodata")" 
+						data-template="{literal}{groupname}{/literal}" 
+						placeholder="$i18n.getText("search.input.placeholder")" 
+						name="group">
+				</div>
+				<div class="field-group">
+					<button class="aui-button aui-button-primary" id="search-submit-button">$i18n.getText("search.button")</button>
+				</div>
 		    </form>
 		</div>
-	    <div id="search-results-container"></div>
+		<br />
+		<div id="aui-message-bar"></div>
+		<br />
+	   	<div id="search-results-container"></div>
     </div>
 	<script type="text/x-template" id="search-result-template">
 	    <div>
-	        <div class="search-result-header">
-	            <a class="search-result-link"></a>
+	        <div class="search-result-body">
+	            <div class="search-result"></div>
 	        </div>
 	    </div>
 	</script>
+	<script type="text/x-template" id="search-error-template">
+	    <div>
+	        <div class="search-error-body" class="search-error-box">
+	    		<div class="search-error-message"></div>
+	        </div>
+	    </div>
+	</script>
+	<fieldset class="hidden parameters">
+	    <input type="hidden" value="$i18n.getText("search.result.nodata")" name="searchResultNodata" id="searchResultNodata">
+	</fieldset>
+	<fieldset class="hidden parameters">
+	    <input type="hidden" value="$i18n.getText("search.result.error")" name="searchResultError" id="searchResultError">
+	</fieldset>
+	<fieldset class="hidden parameters">
+	    <input type="hidden" value="$i18n.getText("search.result.empty")" name="searchEmptySearch" id="searchEmptySearch">
+	</fieldset>
   </body>
 </html>

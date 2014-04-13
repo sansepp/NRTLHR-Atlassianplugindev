@@ -10,29 +10,33 @@
   </plugin-info>
   <!-- i18n resource -->
   <resource type="i18n" name="i18n" location="groupaccess"/>
-  <!-- web resources -->
+  <!-- Web resources -->
   <web-resource key="groupaccess-resources" name="groupaccess Web Resources">
     <dependency>com.atlassian.auiplugin:ajs</dependency>
     <resource type="download" name="groupaccess.css" location="/css/groupaccess.css"/>
     <resource type="download" name="groupaccess.js" location="/js/groupaccess.js"/>
     <resource type="download" name="images/" location="/images"/>
   </web-resource>
+  <!-- Component imports -->
   <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>
   <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider"/>
   <component-import key="renderer" interface="com.atlassian.templaterenderer.TemplateRenderer"/>
   <component-import key="spaceManager" interface="com.atlassian.confluence.spaces.SpaceManager"/>
-  
+  <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
+  <!-- Search servlet -->
   <servlet key="search-servlet" class="com.nortal.atlassian.confluence.plugin.groupaccess.SearchServlet">
     <url-pattern>/groupaccess/search</url-pattern>
   </servlet>
-  <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
-  <!-- Web item to display link in admin config view -->
-  <web-item name="Group access" i18n-name-key="groupaccess.name" key="groupaccess" section="system.admin/configuration" weight="1000">
-    <description key="groupaccess.description">The Group access Plugin</description>
+  <!-- REST search resource -->
+  <rest name="Search Resource" i18n-name-key="search-resource.name" key="search-resource" path="/groupaccess/searchresource" version="1.0">
+  </rest>
+  <!-- Web section in confluence admin view for the plugins link -->
+  <web-section name="Group access plugin" i18n-name-key="groupaccessplugin.name" key="groupaccessplugin" location="system.admin" weight="1000">
+    <label key="groupaccessplugin.label"></label>
+  </web-section>
+  <!-- Web item to display link in the new section generated in the confluence admin view -->
+  <web-item name="Group access search" i18n-name-key="groupaccess.name" key="groupaccess" section="system.admin/groupaccessplugin" weight="1000">
     <label key="groupaccess.label"/>
     <link linkId="groupaccess-link">/plugins/servlet/groupaccess/search</link>
   </web-item>
-  <rest name="Search Resource" i18n-name-key="search-resource.name" key="search-resource" path="/groupaccess/searchresource" version="1.0">
-    <description key="search-resource.description">The Search Resource Plugin</description>
-  </rest>
 </atlassian-plugin>

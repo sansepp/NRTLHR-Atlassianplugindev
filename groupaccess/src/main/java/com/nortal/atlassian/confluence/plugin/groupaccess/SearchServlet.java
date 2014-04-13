@@ -29,7 +29,6 @@ public class SearchServlet extends HttpServlet {
 			redirectToLogin(request, response);
 			return;
 		}
-		
 		response.setContentType("text/html;charset=utf-8");
 		renderer.render("search.vm", response.getWriter());
 	}

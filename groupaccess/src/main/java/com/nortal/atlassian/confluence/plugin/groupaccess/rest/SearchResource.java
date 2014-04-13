@@ -1,18 +1,15 @@
 package com.nortal.atlassian.confluence.plugin.groupaccess.rest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import com.atlassian.confluence.security.SpacePermission;
-import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import com.atlassian.sal.api.user.UserManager;
 import com.nortal.atlassian.confluence.plugin.groupaccess.rest.model.SearchResourceModel;
+import com.nortal.atlassian.confluence.plugin.groupaccess.service.SearchService;
 
 /**
  * A resource of message.
@@ -22,10 +19,12 @@ public class SearchResource {
 
 	private final SpaceManager spaceManager;
     private final UserManager userManager;
+    private final SearchService searchService;
 
 	public SearchResource(SpaceManager spaceManager, UserManager userManager) {
 		this.spaceManager = spaceManager;
 		this.userManager = userManager;
+		searchService = new SearchService(this.spaceManager);
 	}
 
 	@GET
@@ -39,20 +38,7 @@ public class SearchResource {
 		if (search == null || search.isEmpty() || search.trim().isEmpty()) {
 			return Response.ok(new SearchResourceModel(new HashMap<String, String>(), "empty-string")).build();
 		}
-		Map<String, String> result = searchSpaces(search);
-		
+		Map<String, String> result = searchService.searchSpaces(search, false);
 		return Response.ok(new SearchResourceModel(result, result.size() > 0 ? "null" : "no-result")).build();	
-	}
-	
-	private Map<String, String> searchSpaces(String groupName) {
-		Map<String, String> result = new HashMap<String, String>();
-		for (Space space : spaceManager.getAllSpaces()) {
-			for (SpacePermission permission : space.getPermissions()) {
-				if (permission.isGroupPermission() && permission.getGroup().equals(groupName)) {
-					result.put(space.getKey(), space.getName());
-				}
-			}
-		}
-		return result;
 	}
 }

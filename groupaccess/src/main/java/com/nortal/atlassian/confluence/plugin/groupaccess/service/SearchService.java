@@ -4,29 +4,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.atlassian.confluence.security.SpacePermission;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
+import com.atlassian.crowd.model.group.Group;
+import com.nortal.atlassian.confluence.plugin.groupaccess.rest.CrowdNestedGroupSearch;
 
 public class SearchService {
 	private final SpaceManager spaceManager;
 	private Map<String, String> result;
 	private List<String> groupNames;
-	
-	public SearchService(SpaceManager spaceManager){
+	private CrowdNestedGroupSearch crowdNestedGroupSearch;
+
+	public SearchService(SpaceManager spaceManager) {
 		this.spaceManager = spaceManager;
 	}
-	
+
 	public Map<String, String> searchSpaces(String groupName, Boolean nestedSearch) {
-		initData();
+		init();
 		populateGroupNames(groupName, nestedSearch);
-		groupNames.add(groupName);
 		spacesForGroups();
 		return result;
 	}
-	
-	private void initData() {
+
+	private void init() {
+		if (crowdNestedGroupSearch == null) {
+			crowdNestedGroupSearch = new CrowdNestedGroupSearch();
+		}
 		if (result == null) {
 			result = new HashMap<String, String>();
 		} else {
@@ -38,7 +42,7 @@ public class SearchService {
 			groupNames.clear();
 		}
 	}
-	
+
 	private void populateGroupNames(String groupName, Boolean nestedSearch) {
 		if (nestedSearch) {
 			addIntoGroupNames(groupName);
@@ -47,19 +51,17 @@ public class SearchService {
 			addIntoGroupNames(groupName);
 		}
 	}
-	
+
 	private void searchNestedUpperGroups(String groupName) {
-		List<String> upperGroups = new ArrayList<String>();
-		//TODO! upper groups search
-		for (String group : upperGroups) {
-			addIntoGroupNames(group);
+		for (Group group : crowdNestedGroupSearch.doSearchAndGetGroups(groupName)) {
+			addIntoGroupNames(group.getName());
 		}
 	}
-	
+
 	private void addIntoGroupNames(String groupName) {
 		groupNames.add(groupName);
 	}
-	
+
 	private void spacesForGroups() {
 		for (Space space : spaceManager.getAllSpaces()) {
 			for (SpacePermission permission : space.getPermissions()) {

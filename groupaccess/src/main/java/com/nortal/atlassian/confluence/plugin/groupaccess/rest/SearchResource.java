@@ -14,7 +14,7 @@ import com.nortal.atlassian.confluence.plugin.groupaccess.service.SearchService;
 /**
  * A resource of message.
  */
-@Path("/{search}")
+@Path("/{search}/{nested}")
 public class SearchResource {
 
 	private final SpaceManager spaceManager;
@@ -30,7 +30,7 @@ public class SearchResource {
 	@GET
 	@AnonymousAllowed
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response get(@PathParam("search") String search) {
+	public Response get(@PathParam("search") String search, @PathParam("nested") Boolean nested) {
 		String userName = userManager.getRemoteUsername();
 		if (userName == null || !userManager.isSystemAdmin(userName)) {
 			return Response.serverError().build();
@@ -38,7 +38,7 @@ public class SearchResource {
 		if (search == null || search.isEmpty() || search.trim().isEmpty()) {
 			return Response.ok(new SearchResourceModel(new HashMap<String, String>(), "empty-string")).build();
 		}
-		Map<String, String> result = searchService.searchSpaces(search, false);
+		Map<String, String> result = searchService.searchSpaces(search, nested);
 		return Response.ok(new SearchResourceModel(result, result.size() > 0 ? "null" : "no-result")).build();	
 	}
 }

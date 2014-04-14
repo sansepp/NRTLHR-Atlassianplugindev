@@ -1,12 +1,18 @@
 AJS.toInit(function() {
     AJS.$('#search-submit-button').click(search);
+    AJS.$('#search-form-checkbox').click(checkbox);
 });
 
 function search(event) {
 	AJS.$("#aui-message-bar").empty();
 	
     var input = AJS.$("#search-form-input"),
-        results = AJS.$('#search-results-container');
+        results = AJS.$('#search-results-container'),
+        nested = 'false';
+    
+    if (AJS.$('#search-form-checkbox').attr('checked')) {
+    	nested = 'true';
+    }
     
     if (input.val() == '') {
     	AJS.messages.warning({
@@ -14,7 +20,7 @@ function search(event) {
  		});
     } else {
 	    AJS.$.ajax({
-	        url: '/confluence/rest/groupaccess/searchresource/1.0/' + input.val(),
+	        url: '/confluence/rest/groupaccess/searchresource/1.0/' + input.val() + '/' + nested,
 	        type: 'get',
 	        cache: false,
 	        dataType: 'json',
@@ -48,18 +54,19 @@ function search(event) {
     event.preventDefault();
 }
 
+function checkbox(event) {
+	AJS.$("#aui-message-bar").empty();
+	if (AJS.$('#search-form-checkbox').attr('checked')) {
+		AJS.messages.warning({
+			   title:AJS.params.searchNestedWarning
+			});
+	}
+}
+
 function renderMatch(match) {
     renderMatch.template = renderMatch.template || AJS.$(AJS.$('#search-result-template').html());
 	var container = renderMatch.template.clone(),
 	    space = AJS.$('div.search-result', container);
 	space.html(match);
-	return container;
-}
-
-function renderError(error) {
-	renderError.template = renderError.template || AJS.$(AJS.$('#search-error-template').html());
-	var container = renderError.template.clone(),
-		message = AJS.$('div.search-error-message', container);
-	message.html(error);
 	return container;
 }

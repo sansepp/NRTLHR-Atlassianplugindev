@@ -2,7 +2,13 @@ package com.nortal.atlassian.confluence.plugin.groupaccess.rest;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.atlassian.config.ConfigurationException;
 import com.atlassian.confluence.spaces.SpaceManager;
+import com.atlassian.crowd.exception.ApplicationPermissionException;
+import com.atlassian.crowd.exception.GroupNotFoundException;
+import com.atlassian.crowd.exception.InvalidAuthenticationException;
+import com.atlassian.crowd.exception.OperationFailedException;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,8 +24,8 @@ import com.nortal.atlassian.confluence.plugin.groupaccess.service.SearchService;
 public class SearchResource {
 
 	private final SpaceManager spaceManager;
-    private final UserManager userManager;
-    private final SearchService searchService;
+	private final UserManager userManager;
+	private final SearchService searchService;
 
 	public SearchResource(SpaceManager spaceManager, UserManager userManager) {
 		this.spaceManager = spaceManager;
@@ -30,15 +36,16 @@ public class SearchResource {
 	@GET
 	@AnonymousAllowed
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response get(@PathParam("search") String search, @PathParam("nested") Boolean nested) {
+	public Response get(@PathParam("search") String search, @PathParam("nested") Boolean nested) throws GroupNotFoundException,
+			OperationFailedException, InvalidAuthenticationException, ApplicationPermissionException, ConfigurationException {
 		String userName = userManager.getRemoteUsername();
 		if (userName == null || !userManager.isSystemAdmin(userName)) {
-			return Response.serverError().build();
+			return Response.noContent().build();
 		}
 		if (search == null || search.isEmpty() || search.trim().isEmpty()) {
 			return Response.ok(new SearchResourceModel(new HashMap<String, String>(), "empty-string")).build();
 		}
 		Map<String, String> result = searchService.searchSpaces(search, nested);
-		return Response.ok(new SearchResourceModel(result, result.size() > 0 ? "null" : "no-result")).build();	
+		return Response.ok(new SearchResourceModel(result, result.size() > 0 ? "null" : "no-result")).build();
 	}
 }

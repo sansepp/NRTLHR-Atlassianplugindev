@@ -24,7 +24,7 @@
   <component-import key="spaceManager" interface="com.atlassian.confluence.spaces.SpaceManager"/>
   <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
   <!-- Search servlet -->
-  <servlet key="search-servlet" class="com.nortal.atlassian.confluence.plugin.groupaccess.SearchServlet">
+  <servlet key="search-servlet" class="com.nortal.atlassian.confluence.plugin.groupaccess.servlet.SearchServlet">
     <url-pattern>/groupaccess/search</url-pattern>
   </servlet>
   <!-- REST search resource -->

@@ -10,25 +10,25 @@
 		<div id="search-form-container">
 		    <form id="search-form" class="aui">
 				<fieldset class="group">
+					<div class="field-group">
+						<label for="search-form-input">$i18n.getText("search.input.lable")</label>
+					    <input 
+							id="search-form-input" 
+							type="text" 
+							class="text autocomplete-group" 
+							data-none-message="$i18n.getText("search.input.nodata")" 
+							data-template="{literal}{groupname}{/literal}" 
+							placeholder="$i18n.getText("search.input.placeholder")" 
+							name="group">
+					</div>
 					<div class="checkbox">
-					<input class="checkbox" type="checkbox" id="search-form-checkbox">
-        			<label for="search-form-checkbox">$i18n.getText("search.checkbox.lable")</label>
+	        			<label for="search-form-checkbox">$i18n.getText("search.checkbox.lable")</label>
+						<input class="checkbox" type="checkbox" id="search-form-checkbox">
 					</div>
 					<div class="field-group">
-					<label for="search-form-input">$i18n.getText("search.input.lable")</label>
-				    <input 
-						id="search-form-input" 
-						type="text" 
-						class="text autocomplete-group" 
-						data-none-message="$i18n.getText("search.input.nodata")" 
-						data-template="{literal}{groupname}{/literal}" 
-						placeholder="$i18n.getText("search.input.placeholder")" 
-						name="group">
+						<button class="aui-button aui-button-primary" id="search-submit-button">$i18n.getText("search.button")</button>
 					</div>
 				</fieldset>
-				<div class="field-group">
-					<button class="aui-button aui-button-primary" id="search-submit-button">$i18n.getText("search.button")</button>
-				</div>
 		    </form>
 		</div>
 		<br />
@@ -61,6 +61,9 @@
 	</fieldset>
 	<fieldset class="hidden parameters">
 	    <input type="hidden" value="$i18n.getText("search.nested.warning")" name="searchNestedWarning" id="searchNestedWarning">
+	</fieldset>
+	<fieldset class="hidden parameters">
+	    <input type="hidden" value="$i18n.getText("search.result.ok")" name="searchResultOk" id="searchResultOk">
 	</fieldset>
   </body>
 </html>

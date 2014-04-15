@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.atlassian.config.ConfigurationException;
 import com.atlassian.confluence.security.SpacePermission;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
+import com.atlassian.crowd.exception.ApplicationPermissionException;
+import com.atlassian.crowd.exception.GroupNotFoundException;
+import com.atlassian.crowd.exception.InvalidAuthenticationException;
+import com.atlassian.crowd.exception.OperationFailedException;
 import com.atlassian.crowd.model.group.Group;
-import com.nortal.atlassian.confluence.plugin.groupaccess.rest.CrowdNestedGroupSearch;
+import com.nortal.atlassian.confluence.plugin.groupaccess.crowd.CrowdNestedGroupSearch;
 
 public class SearchService {
 	private final SpaceManager spaceManager;
@@ -20,14 +26,15 @@ public class SearchService {
 		this.spaceManager = spaceManager;
 	}
 
-	public Map<String, String> searchSpaces(String groupName, Boolean nestedSearch) {
+	public Map<String, String> searchSpaces(String groupName, Boolean nestedSearch) throws GroupNotFoundException,
+			OperationFailedException, InvalidAuthenticationException, ApplicationPermissionException, ConfigurationException {
 		init();
 		populateGroupNames(groupName, nestedSearch);
 		spacesForGroups();
 		return result;
 	}
 
-	private void init() {
+	private void init() throws ConfigurationException {
 		if (crowdNestedGroupSearch == null) {
 			crowdNestedGroupSearch = new CrowdNestedGroupSearch();
 		}
@@ -43,7 +50,8 @@ public class SearchService {
 		}
 	}
 
-	private void populateGroupNames(String groupName, Boolean nestedSearch) {
+	private void populateGroupNames(String groupName, Boolean nestedSearch) throws GroupNotFoundException,
+			OperationFailedException, InvalidAuthenticationException, ApplicationPermissionException {
 		if (nestedSearch) {
 			addIntoGroupNames(groupName);
 			searchNestedUpperGroups(groupName);
@@ -52,7 +60,8 @@ public class SearchService {
 		}
 	}
 
-	private void searchNestedUpperGroups(String groupName) {
+	private void searchNestedUpperGroups(String groupName) throws GroupNotFoundException, OperationFailedException,
+			InvalidAuthenticationException, ApplicationPermissionException {
 		for (Group group : crowdNestedGroupSearch.doSearchAndGetGroups(groupName)) {
 			addIntoGroupNames(group.getName());
 		}

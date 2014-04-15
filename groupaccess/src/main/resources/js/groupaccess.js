@@ -32,13 +32,18 @@ function search(event) {
 	                	results.append(renderMatch(String(this)));
 	                });
 	                results.addClass("result-border");
+	                
+	            	AJS.messages.success({
+	            		   title:AJS.params.searchResultOk + ' ' + input.val()
+	            		});
+	                
 	            } else if (response.error == "empty-string"){
 	            	AJS.messages.warning({
 	            		   title:AJS.params.searchEmptySearch
 	            		});
 	            } else if (response.error == "no-result") {
 	            	AJS.messages.generic({
-	         		   title:AJS.params.searchResultNodata
+	         		   title:AJS.params.searchResultNodata + ' ' + input.val()
 	         		});
 	            }
 	        },

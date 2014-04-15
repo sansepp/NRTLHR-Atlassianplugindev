@@ -10,3 +10,11 @@ div.search-result-body {
     -webkit-border-radius: 5px;
     border-radius: 5px;
 }
+
+#com-atlassian-confluence .aui-dd-parent .aui-dropdown {
+	padding: 4px;
+}
+
+#search-container {
+	max-width: 500px;
+}

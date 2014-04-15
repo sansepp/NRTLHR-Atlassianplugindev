@@ -13,7 +13,7 @@ public class SearchResourceModel {
     @JsonProperty private String error;
 
     @JsonCreator
-    public SearchResourceModel(Map<String, String> results,
+    public SearchResourceModel(@JsonProperty("results") Map<String, String> results,
     		@JsonProperty("error") @Nullable String error) {
     	populateResult(results);
         this.error = error;

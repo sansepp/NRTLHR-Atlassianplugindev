@@ -4,18 +4,19 @@ The "Group access" plugins nested group search functionality requires Crowd - Co
 o Environment used for developing the plugin
 	- Atlassian Crowd
 		"atlas-run-standalone --product crowd" version 2.7.1 loaded
-		groups created: "confluence-administrators", "confluence-users", "atlassian-users", "atlassian-developers", "team-awesome"
-		users created: "admin_crowd"
-		user group relationship: 
-			"admin_crowd" : "confluence-administrators", "confluence-users"
-		group group relationship:
-			"atlassian-users" :<nested child groups>: "atlassian-developers", "team-awesome"
-		application: name "crowd_auth", url "http://localhost:4990/confluence/", password "admin"
+		create data for confluence - crowd linking:
+			groups created: "confluence-administrators", "confluence-users", "atlassian-users", "atlassian-developers", "team-awesome"
+			users created: "admin_crowd"
+			user group relationship: 
+				"admin_crowd" : "confluence-administrators", "confluence-users"
+			group group relationship:
+				"atlassian-users" :<nested child groups>: "atlassian-developers", "team-awesome"
+			application: name "crowd_auth", url "http://localhost:4990/confluence/", password "admin"
 		
 	- Atlassian Confluence
 		"atlas-run -DskipTests" on the plugin, version 5.4.4 loaded
+			(OR "atlas-run-standalone --product confluence" and install the plugin JAR)
 		configured Crowd as the default User direcotry for Confluence (nested groups enabled) using "crowd_auth" in Crowd
-		linked Crowd and Confluence applications
 		spaces created: "Team awesome space", "Public tutorial space"
 		space - group permissions:
 			"Team awesome space" : "team-awesome"

@@ -65,5 +65,8 @@
 	<fieldset class="hidden parameters">
 	    <input type="hidden" value="$i18n.getText("search.result.ok")" name="searchResultOk" id="searchResultOk">
 	</fieldset>
+	<fieldset class="hidden parameters">
+	    <input type="hidden" value="$i18n.getText("search.input.long")" name="searchTooLong" id="searchTooLong">
+	</fieldset>
   </body>
 </html>

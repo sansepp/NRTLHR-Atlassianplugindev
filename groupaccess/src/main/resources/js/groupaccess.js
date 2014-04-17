@@ -9,6 +9,9 @@ function search(event) {
     var input = AJS.$("#search-form-input"),
         results = AJS.$('#search-results-container'),
         nested = 'false';
+	
+	results.empty();
+	results.removeClass("result-border");
     
     if (AJS.$('#search-form-checkbox').attr('checked')) {
     	nested = 'true';
@@ -18,6 +21,11 @@ function search(event) {
     	AJS.messages.warning({
  		   title:AJS.params.searchEmptySearch
  		});
+		
+	} else if (input.val().length > 255) {
+    	AJS.messages.warning({
+ 		   title:AJS.params.searchTooLong
+ 		});
     } else {
 	    AJS.$.ajax({
 	        url: '/confluence/rest/groupaccess/searchresource/1.0/' + input.val() + '/' + nested,
@@ -25,8 +33,6 @@ function search(event) {
 	        cache: false,
 	        dataType: 'json',
 	        success: function(response) {
-	            results.empty();
-	            results.removeClass("result-border");
 	            if (response.error == 'null') {
 	                AJS.$.each(response.result, function() {
 	                	results.append(renderMatch(String(this)));
